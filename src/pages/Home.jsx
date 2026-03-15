@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import DefaultLayout from "../layouts/DefaultLayout";
 
-const TARGET_DATE = new Date("2025-12-31T23:59:59");
+const TARGET_DATE = new Date("2026-12-31T23:59:59");
 
 function getTimeRemaining(target) {
   const total = target - new Date();

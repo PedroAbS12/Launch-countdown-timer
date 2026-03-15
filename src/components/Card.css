@@ -1,0 +1,153 @@
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Contenedor principal con perspectiva */
+.card {
+  position: relative;
+  width: 8rem; /* 128px */
+  height: 8rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  perspective: 400px;
+  background: #34364f;
+}
+
+/* ─── MITADES ESTÁTICAS (fondo) ─────────────────────────────── */
+
+/* Cada mitad ocupa exactamente la mitad vertical y recorta */
+.card__half {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%; /* mitad exacta */
+  overflow: hidden; /* clip del número */
+  z-index: 10;
+}
+
+.card__half--top {
+  top: 0;
+  background: #2c2e47;
+  border-radius: 0.5rem 0.5rem 0 0;
+  /* El número (128px tall) se centra dentro de la tarjeta completa (128px).
+     Como este div empieza en top:0 y mide 64px, el número centrado en 128px
+     queda con su mitad superior visible aquí. */
+  align-items: flex-start;
+}
+
+.card__half--bottom {
+  bottom: 0;
+  background: #24263d;
+  border-radius: 0 0 0.5rem 0.5rem;
+  /* El número centrado en 128px:
+     top del número = (128-altura_número)/2 ≈ 0 para text-7xl.
+     Necesitamos mostrar solo la mitad inferior.
+     Desplazamos el contenido -64px (hacia arriba) para que
+     la mitad de abajo del número quede visible en este clip. */
+}
+
+/* Número dentro de cada mitad estática */
+.card__number-container {
+  position: relative;
+  width: 100%;
+  /* Alto total de la tarjeta para que el número se centre correctamente */
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* La mitad inferior desplaza el contenedor hacia arriba
+   para mostrar solo la parte baja del número */
+.card__half--bottom .card__number-container {
+  transform: translateY(-50%); /* sube 64px = mitad del card */
+}
+
+.card__number {
+  font-size: 4.5rem; /* ~72px, equivalente a text-7xl */
+  font-weight: 700;
+  color: #da6384;
+  user-select: none;
+  line-height: 1;
+  font-family: inherit;
+}
+
+/* ─── HOJAS ANIMADAS ─────────────────────────────────────────── */
+
+.card__flap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  z-index: 20;
+  backface-visibility: hidden;
+}
+
+/* Hoja superior: cae hacia abajo rotando en el eje X desde su borde inferior */
+.card__flap--top {
+  top: 0;
+  background: #2c2e47;
+  border-radius: 0.5rem 0.5rem 0 0;
+  transform-origin: bottom center;
+  transform: rotateX(0deg);
+}
+
+/* Hoja inferior: sube desde abajo rotando en el eje X desde su borde superior */
+.card__flap--bottom {
+  bottom: 0;
+  background: #24263d;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transform-origin: top center;
+  transform: rotateX(90deg); /* oculta por defecto */
+}
+
+/* Los números dentro de las hojas usan los mismos contenedores */
+.card__flap--bottom .card__number-container {
+  transform: translateY(-50%);
+}
+
+/* ─── DETALLES ───────────────────────────────────────────────── */
+
+/* Línea divisoria central */
+.card__divider {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #111120;
+  z-index: 30;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* Sombra sutil debajo de la hoja superior para simular profundidad */
+.card__shadow {
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+
+.card-footer {
+  text-align: center;
+  margin: 0;
+}
+
+.card-footer__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8b8fa8;
+}
